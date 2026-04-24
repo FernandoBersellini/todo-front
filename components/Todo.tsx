@@ -3,14 +3,17 @@
 import { useState } from "react";
 
 interface TodoProps {
+    id: number;
     title: string;
     description: string;
     createdAt: string;
+    handleDeleteTodo: (id: number) => void;
 }
 
-export default function Todo({ title, description, createdAt }: TodoProps) {
+export default function Todo({id, title, description, createdAt, handleDeleteTodo }: TodoProps) {
     const [isDone, setIsDone] = useState(false);
 
+   
     return (
         <div className="w-2/5 border border-gray-200 rounded-lg p-4">
             <div>
@@ -26,7 +29,9 @@ export default function Todo({ title, description, createdAt }: TodoProps) {
                     className="bg-green-700 text-white px-2 py-1 rounded-lg cursor-pointer transition hover:bg-green-800">
                     {isDone ? "Undo" : "Done"}
                 </button>
-                <button className="bg-red-700 text-white px-2 py-1 rounded-lg cursor-pointer transition hover:bg-red-800">Delete</button>
+                {!isDone && (
+                    <button onClick={() => handleDeleteTodo(id)} className="bg-red-700 text-white px-2 py-1 rounded-lg cursor-pointer transition hover:bg-red-800">Delete</button>
+                )}
             </div>
         </div>
     );
