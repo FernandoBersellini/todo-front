@@ -1,12 +1,21 @@
 'use client'
 
 import Todo from "@/components/Todo";
-import { mockTodos } from "@/utils/mockTodo";
 import TodoForm from "@/components/TodoForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+async function getTodos() {
+  const response = await fetch("http://localhost:8000/api/todos");
+  const data = await response.json();
+  return data;
+}
 
 export default function Home() {
   const [todos, setTodos] = useState<any[]>([]);
+
+  useEffect(() => {
+    getTodos().then(data => setTodos(data));
+  }, []);
 
   const handleAddTodo = (newTodo: any) => {
     setTodos([newTodo, ...todos]);
@@ -26,7 +35,7 @@ export default function Home() {
       
       <div className="flex flex-col items-center gap-5 mt-10">
         {todos.map((todo) => (
-          <Todo key={todo.id} id={todo.id} title={todo.title} description={todo.description} createdAt={todo.createdAt} handleDeleteTodo={handleDeleteTodo} />
+          <Todo key={todo.id} id={todo.id} title={todo.title} description={todo.description} createdAt={todo.created_at} handleDeleteTodo={handleDeleteTodo} />
         ))}
       </div>
     </div>
