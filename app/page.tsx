@@ -10,6 +10,14 @@ async function getTodos() {
   return data;
 }
 
+async function deleteTodo(id: number) {
+  const response = await fetch(`http://localhost:8000/api/todos/${id}/`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  return data;
+}
+
 export default function Home() {
   const [todos, setTodos] = useState<any[]>([]);
 
@@ -22,7 +30,12 @@ export default function Home() {
   };
 
   const handleDeleteTodo = (id: number) => {
+    deleteTodo(id);
     setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const handleEditTodo = (id: number, title: string, description: string) => {
+    setTodos(todos.map((todo) => todo.id === id ? { ...todo, title, description } : todo));
   };
 
   return (
@@ -35,7 +48,7 @@ export default function Home() {
       
       <div className="flex flex-col items-center gap-5 mt-10">
         {todos.map((todo) => (
-          <Todo key={todo.id} id={todo.id} title={todo.title} description={todo.description} createdAt={todo.created_at} handleDeleteTodo={handleDeleteTodo} />
+          <Todo key={todo.id} id={todo.id} title={todo.title} description={todo.description} createdAt={todo.created_at} handleDeleteTodo={handleDeleteTodo} handleEditTodo={handleEditTodo} />
         ))}
       </div>
     </div>
